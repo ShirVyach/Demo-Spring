@@ -65,27 +65,7 @@ public class fileController {
     @GetMapping("/downloadfile")
     public ResponseEntity downfile(@RequestParam ("id") List<Long> id, HttpServletResponse response) throws IOException {
 
-        if(id.size()>1) {
-            ZipOutputStream zipOut = new ZipOutputStream(response.getOutputStream());
-
-            for (Long Id : id) {
-                file file = FileService.getFile(Id);
-                ZipEntry zipEntry = new ZipEntry(file.getName());
-                zipEntry.setSize(file.getData().length);
-                zipOut.putNextEntry(zipEntry);
-                StreamUtils.copy(file.getData(), zipOut);
-                zipOut.closeEntry();
-            }
-            zipOut.finish();
-            zipOut.close();
-            response.setStatus(HttpServletResponse.SC_OK);
-            response.addHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + "zipFileName" + "\"");
-        }
-        else {
-            file file = FileService.getFile(id.get(0));
-            response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment ;filename=\"" + file.getName() + "\"");
-            FileCopyUtils.copy(file.getData(), response.getOutputStream());
-        }
+        FileService.downloadfile(id, response);
         try {
             return ResponseEntity.ok("Скачивание завершено");
 
