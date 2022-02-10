@@ -1,31 +1,21 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.file;
-import com.example.demo.exception.fileException;
+import com.example.demo.exception.FileException;
 import com.example.demo.service.fileService;
-import org.apache.tomcat.util.http.fileupload.FileUpload;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.data.repository.query.Param;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.FileCopyUtils;
-import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 
 @RestController
 @RequestMapping("/files")
-public class fileController {
+public class FileController {
 
     @Autowired
     private fileService FileService;
@@ -35,7 +25,7 @@ public class fileController {
         try {
             FileService.Upload(multipartFile);
             return ResponseEntity.ok("Файл добавлен");
-        } catch (fileException e) {
+        } catch (FileException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Ошибка");
